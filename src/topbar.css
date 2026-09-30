@@ -498,8 +498,13 @@
     border: 1.5px solid var(--kst-card);
   }
 
-  /* Keep dropdowns within the viewport on small screens. */
+  /* Keep dropdowns within the viewport on small screens. Anchored to the
+     screen edge, not the button: a 340px panel hung off the bell's right edge
+     ran off the left of a phone screen. 64px = the bar's 56px + 8px gap. */
   .kst-panel {
+    position: fixed;
+    top: 64px;
+    right: 14px;
     width: calc(100vw - 28px);
     max-width: 340px;
   }

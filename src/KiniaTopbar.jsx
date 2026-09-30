@@ -75,7 +75,10 @@ const KiniaTopbar = ({
   }, [openMenu])
 
   const sections = (notifications?.sections ?? []).filter((s) => s.items?.length > 0)
-  const totalCount = sections.reduce((n, s) => n + (s.total ?? s.items.length), 0)
+  // `count` overrides the badge for sections that summarise several records in
+  // one line (the HR Portal's "N policies to acknowledge" is one item, N records).
+  const totalCount = notifications?.count
+    ?? sections.reduce((n, s) => n + (s.total ?? s.items.length), 0)
   const loading = !!notifications?.loading
   const loaded  = notifications?.loaded ?? true
 

@@ -9,7 +9,7 @@ Portal's, which is the standard.
 1. Install a fixed version:
 
    ```bash
-   npm install github:Kinia-Ireland/Shared-Nav-Bar#v1.0.0
+   npm install github:Kinia-Ireland/Shared-Nav-Bar#v1.1.0
    ```
 
 2. Import it once, in your app layout:
@@ -72,13 +72,15 @@ notifications={{
 ```
 
 The badge count is the sum of every section's `total` (or its item count).
+Pass `count` alongside `sections` to set the badge yourself, for a section that
+sums up several records in one line.
 
 ## Changing the bar
 
 1. Edit `src/`, then run `npm run build`. Commit `dist/` as well, because apps
    install the built files.
 2. Bump `version` in `package.json`, commit, and tag it (`git tag v1.1.0`), then push the tag.
-3. In each app, change `#v1.0.0` to the new tag and run `npm install`. Apps
+3. In each app, change `#v1.1.0` to the new tag and run `npm install`. Apps
    only change when you upgrade them.
 
 To try a change in an app before releasing it, run `npm run pack:local` here
