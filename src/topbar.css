@@ -1,0 +1,507 @@
+/* Shared Kinia top bar. Visual source of truth: KiniaHRPortal's
+   src/components/layout/Topbar.module.css — keep the two identical in look.
+
+   Every class is prefixed `kst-` so nothing here can collide with an app's own
+   styles, and the bar carries its own colour set so it looks the same whatever
+   the host app's variables are. To retheme one app, override the --kst-*
+   tokens on `.kst-topbar` in that app's CSS. */
+
+.kst-topbar {
+  --kst-purple: #262262;
+  --kst-purple-mid: #453FA0;
+  --kst-purple-light: #E3E2F1;
+  --kst-purple-pale: #F4F4FA;
+  --kst-green: #39B54A;
+  --kst-amber: #F37021;
+  --kst-red: #EF4D41;
+  --kst-slate: #1E1B33;
+  --kst-slate-mid: #45415F;
+  --kst-slate-light: #8B85A1;
+  --kst-bg: #F4F5FA;
+  --kst-border: #D9DAEA;
+  --kst-card: #FFFFFF;
+  --kst-radius: 14px;
+  --kst-radius-sm: 8px;
+  --kst-font: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --kst-font-head: 'Plus Jakarta Sans', var(--kst-font);
+
+  background: var(--kst-card);
+  border-bottom: 1px solid var(--kst-border);
+  padding: 13px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: 56px;
+  box-sizing: border-box;
+  font-family: var(--kst-font);
+  color: var(--kst-slate);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scoped reset, zero specificity so every rule below wins. The HR Portal gets
+   this from its global stylesheet; other apps may not reset at all. */
+:where(.kst-topbar) *,
+:where(.kst-topbar) *::before,
+:where(.kst-topbar) *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+:where(.kst-topbar) button { font-family: var(--kst-font); cursor: pointer; }
+:where(.kst-topbar) a { color: inherit; text-decoration: none; }
+
+.kst-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.kst-menuBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
+  border-radius: var(--kst-radius-sm);
+  color: var(--kst-slate-mid);
+  font-size: 18px;
+  transition: background 0.15s;
+}
+.kst-menuBtn:hover { background: var(--kst-bg); }
+
+/* ── Brand (apps without a sidebar) ── */
+.kst-brand {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+  flex-shrink: 0;
+}
+.kst-brandName {
+  font-family: var(--kst-font-head);
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--kst-purple);
+  letter-spacing: -0.5px;
+  text-transform: lowercase;
+}
+.kst-brandSub {
+  font-size: 11px;
+  color: var(--kst-slate-light);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.kst-title {
+  font-family: var(--kst-font-head);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--kst-slate);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.kst-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.kst-langBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  border-radius: var(--kst-radius-sm);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border: 1.5px solid var(--kst-border);
+  background: var(--kst-card);
+  color: var(--kst-slate-mid);
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  min-width: 38px;
+}
+.kst-langBtn:hover {
+  border-color: var(--kst-purple);
+  color: var(--kst-purple);
+  background: var(--kst-purple-pale);
+}
+
+.kst-notifBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--kst-radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  border: 1.5px solid var(--kst-border);
+  background: var(--kst-card);
+  color: var(--kst-purple);
+  transition: border-color 0.15s, background 0.15s;
+}
+.kst-notifIcon { line-height: 1; }
+.kst-notifBtn:hover,
+.kst-notifBtnActive {
+  border-color: var(--kst-purple);
+  background: var(--kst-purple-pale);
+}
+
+.kst-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: var(--kst-red);
+  color: #fff;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ── Dropdown panels ── */
+.kst-menuWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.kst-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 340px;
+  background: #fff;
+  border: 1px solid var(--kst-border);
+  border-radius: var(--kst-radius);
+  box-shadow: 0 12px 40px rgba(38, 34, 98, 0.15);
+  z-index: 200;
+  max-height: 480px;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.kst-panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--kst-border);
+  position: sticky;
+  top: 0;
+  background: #fff;
+}
+.kst-panelTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--kst-slate);
+}
+.kst-panelClose {
+  background: none;
+  border: none;
+  color: var(--kst-slate-light);
+  font-size: 14px;
+  padding: 2px 6px;
+  border-radius: var(--kst-radius-sm);
+}
+.kst-panelClose:hover { background: var(--kst-bg); }
+
+.kst-panelHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.kst-clearAllBtn {
+  background: none;
+  border: none;
+  color: var(--kst-purple);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 7px;
+  border-radius: var(--kst-radius-sm);
+  white-space: nowrap;
+}
+.kst-clearAllBtn:hover:not(:disabled) { background: var(--kst-purple-pale); }
+.kst-clearAllBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.kst-panelLoading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 16px;
+  font-size: 13px;
+  color: var(--kst-slate-light);
+}
+
+.kst-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--kst-border);
+  border-top-color: var(--kst-purple);
+  border-radius: 50%;
+  animation: kst-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes kst-spin { to { transform: rotate(360deg); } }
+
+.kst-panelEmpty {
+  padding: 24px 16px;
+  font-size: 13px;
+  color: var(--kst-slate-light);
+  text-align: center;
+}
+
+.kst-section {
+  border-bottom: 1px solid var(--kst-border);
+  padding: 8px 0;
+}
+.kst-section:last-child { border-bottom: none; }
+
+.kst-sectionLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--kst-slate-light);
+  padding: 4px 16px 6px;
+}
+
+.kst-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  transition: background 0.12s;
+}
+.kst-item:hover { background: var(--kst-bg); }
+
+.kst-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+.kst-dot-red    { background: var(--kst-red); }
+.kst-dot-amber  { background: var(--kst-amber); }
+.kst-dot-purple { background: var(--kst-purple); }
+.kst-dot-green  { background: var(--kst-green); }
+
+.kst-itemBody  { flex: 1; min-width: 0; }
+.kst-itemTitle { font-size: 13px; font-weight: 600; color: var(--kst-slate); line-height: 1.3; }
+.kst-itemSub   { font-size: 11px; color: var(--kst-slate-light); margin-top: 1px; }
+
+.kst-more {
+  font-size: 12px;
+  color: var(--kst-purple);
+  padding: 4px 16px 8px;
+  font-weight: 600;
+}
+
+/* ── Account menu (apps without a sidebar) ── */
+.kst-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid var(--kst-border);
+  background: var(--kst-purple-light);
+  color: var(--kst-purple);
+  font-family: var(--kst-font-head);
+  font-size: 12px;
+  font-weight: 700;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.kst-avatar:hover,
+.kst-avatarActive {
+  border-color: var(--kst-purple);
+  background: var(--kst-purple);
+  color: #fff;
+}
+
+.kst-accountPanel {
+  width: auto;
+  min-width: 230px;
+  padding: 6px;
+}
+.kst-acctId { padding: 10px 12px 8px; }
+.kst-acctId b {
+  display: block;
+  font-family: var(--kst-font-head);
+  font-size: 13px;
+  color: var(--kst-slate);
+}
+.kst-acctId span { font-size: 12px; color: var(--kst-slate-light); }
+.kst-acctNote { padding: 6px 12px 8px; font-size: 12px; color: var(--kst-amber); }
+.kst-sep { height: 1px; background: var(--kst-border); margin: 4px 0; }
+.kst-menuItem {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 9px 12px;
+  border: none;
+  background: none;
+  font-size: 13px;
+  color: var(--kst-slate);
+  border-radius: var(--kst-radius-sm);
+}
+.kst-menuItem:hover { background: var(--kst-purple-pale); color: var(--kst-purple); }
+
+/* ── Waffle app launcher ── */
+.kst-waffle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 34px;
+  border-radius: var(--kst-radius-sm);
+  border: 1.5px solid var(--kst-border);
+  background: var(--kst-card);
+  color: var(--kst-slate-mid);
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.kst-waffle:hover,
+.kst-waffleActive {
+  border-color: var(--kst-purple);
+  background: var(--kst-purple-pale);
+  color: var(--kst-purple);
+}
+
+.kst-waffleGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+}
+.kst-waffleGrid i {
+  width: 5px;
+  height: 5px;
+  border-radius: 1.5px;
+  background: currentColor;
+  display: block;
+}
+
+.kst-launcher { width: 320px; }
+
+.kst-launcherHead {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--kst-border);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--kst-slate-light);
+}
+
+.kst-launcherGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 12px;
+}
+
+.kst-launchApp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 14px 6px;
+  border: none;
+  background: none;
+  border-radius: var(--kst-radius-sm);
+  text-align: center;
+}
+.kst-launchApp:hover:not(:disabled) { background: var(--kst-purple-pale); }
+.kst-launchApp.kst-soon { opacity: 0.45; cursor: default; }
+
+.kst-launchIc {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #fff;
+}
+
+.kst-launchNm {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--kst-slate);
+  line-height: 1.2;
+}
+
+.kst-bg-purple { background: linear-gradient(135deg, #262262, #453FA0); }
+.kst-bg-blue   { background: linear-gradient(135deg, #2F6DF6, #5B8CFF); }
+.kst-bg-teal   { background: linear-gradient(135deg, #0D9488, #22B8A6); }
+.kst-bg-amber  { background: linear-gradient(135deg, #F59E0B, #FBBF24); }
+.kst-bg-green  { background: linear-gradient(135deg, #16A34A, #22C55E); }
+.kst-bg-red    { background: linear-gradient(135deg, #EF4444, #F87171); }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .kst-topbar {
+    padding: 10px 14px;
+    gap: 8px;
+  }
+
+  .kst-menuBtn { display: flex; }
+
+  .kst-title { font-size: 16px; }
+
+  .kst-brandSub { display: none; }
+
+  .kst-right { gap: 6px; }
+
+  /* Bell collapses to an icon-only control, matching the waffle. */
+  .kst-notifLabel { display: none; }
+
+  .kst-notifBtn {
+    width: 36px;
+    height: 34px;
+    padding: 0;
+    gap: 0;
+    justify-content: center;
+    font-size: 15px;
+  }
+
+  /* Count moves to a corner badge now that the label is gone. */
+  .kst-notifBtn .kst-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border: 1.5px solid var(--kst-card);
+  }
+
+  /* Keep dropdowns within the viewport on small screens. */
+  .kst-panel {
+    width: calc(100vw - 28px);
+    max-width: 340px;
+  }
+  .kst-accountPanel { width: auto; }
+}
